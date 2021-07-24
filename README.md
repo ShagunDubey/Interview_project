@@ -12,4 +12,8 @@ Interview:
   cand_mail: References a Participant object , foreign key
   int_mail: References a Participant object , foreign key
 
-Functionality to send mails has been added but is currently disabled.  
+Functionality to send mails has been added but is currently disabled. 
+
+![create](create.png)
+![main](main_page.png)
+![update](update.png)
