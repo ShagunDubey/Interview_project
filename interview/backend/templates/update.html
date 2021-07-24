@@ -1,0 +1,73 @@
+{% extends 'base.html' %} {% block title %} Update {% endblock title%} {% block content %}
+<div class='container-fluid' style="margin-top:4%">
+<form
+  method="post"
+  action='{% url "update" %}'
+  style="background-color: inherit"
+>
+  {%csrf_token%}
+  <div class="col-md-8">
+    <div class="form-group">
+      <label>Candidate details:</label>
+      <input type="text" disabled placeholder="{{slot.cand_email}}" />
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div class="form-group">
+      <label>Interviewer details:</label>
+      <input type="text" disabled placeholder="{{ slot.int_email }}" />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="form-group pmd-textfield pmd-textfield-floating-label">
+        <label class="control-label" for="datepicker-start">Enter new start time:</label>
+        <input
+          type="text"
+          class="form-control"
+          name="start_date"
+          id="datepicker-start"
+        />
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="form-group pmd-textfield pmd-textfield-floating-label">
+        <label class="control-label" for="datepicker-end">Enter new end time:</label>
+        <input
+          type="text"
+          class="form-control"
+          name="end_date"
+          id="datepicker-end"
+        />
+      </div>
+    </div>
+  </div>
+  <input type="hidden" name="pk" value="{{slot.pk}}" placeholder="{{ slot.pk }}" />
+  <center>
+    <input type="submit" value="Update" class="btn btn-primary" />
+  </center>
+</form>
+</div>
+<script>
+	// Linked date and time picker 
+	// start date date and time picker 
+	$('#datepicker-start').datetimepicker({
+    format: 'yyyy-mm-dd hh:mm'
+  });
+
+	// End date date and time picker 
+	$('#datepicker-end').datetimepicker({
+    format: 'yyyy-mm-dd hh:mm'
+	});
+	
+	// start date picke on chagne event [select minimun date for end date datepicker]
+	$("#datepicker-start").on("dp.change", function (e) {
+		$('#datepicker-end').data("DateTimePicker").minDate(e.date);
+	});
+	// Start date picke on chagne event [select maxmimum date for start date datepicker]
+	$("#datepicker-end").on("dp.change", function (e) {
+		$('#datepicker-start').data("DateTimePicker").maxDate(e.date);
+	});
+</script>
+{% endblock content %}

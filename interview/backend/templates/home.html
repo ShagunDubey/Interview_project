@@ -1,0 +1,120 @@
+{% extends 'base.html' %} {% block title %} Interviews {% endblock title%} 
+{% block content %}
+<center>
+  <h1>Create Interview<i class="fa fa-calendar-week"></i></h1>
+</center>
+<div class="container-fluid">
+  <form
+    method="post"
+    action='{% url "create" %}'
+    style="background-color: inherit"
+  >
+    {%csrf_token%}
+    <div class="col-md-5">
+      <div class="form-group">
+        <label>Candidate's email</label>
+
+        <select name="candidate">
+          <option value="None"></option>
+          {% for participant in participants %}
+          <option value="{{ participant.email }}">
+            {{ participant.email }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="form-group">
+        <label>Interviewer's email</label>
+        <select name="interviewer">
+        <option value="None"></option>
+        {% for participant in participants %}
+        <option value="{{ participant.email }}">{{ participant.email }}</option>
+        {% endfor %}
+      </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-6"> 
+        <div class="form-group pmd-textfield pmd-textfield-floating-label">
+          <label class="control-label" for="datepicker-start">Starts on:</label>
+          <input type="text" class="form-control" name="start_date" id="datepicker-start">
+        </div>
+      </div>
+      <div class="col-sm-6"> 
+        <div class="form-group pmd-textfield pmd-textfield-floating-label">
+          <label class="control-label" for="datepicker-end">Ends on:</label>
+          <input type="text" class="form-control" name="end_date" id="datepicker-end">
+        </div>
+      </div>
+    </div>
+
+    <center>
+      <input type="submit" value="Create" class="btn btn-primary" />
+    </center>
+  </form>
+</div>
+
+<script>
+	// Linked date and time picker 
+	// start date date and time picker 
+	$('#datepicker-start').datetimepicker({
+    format: 'yyyy-mm-dd hh:MM'
+  });
+
+	// End date date and time picker 
+	$('#datepicker-end').datetimepicker({
+    format: 'yyyy-mm-dd hh:MM'
+	});
+	
+</script>
+<div class="container-fluid" style="margin-top: 2%;">
+{% if not interviews%}
+<h3>No interviews scheduled yet.</h3>
+
+{% else %}
+<table class="table table-dark table-striped">
+  <tr>
+    <th>Candidate</th>
+    <th>Interviewer</th>
+    <th>Starts on</th>
+    <th>Ends on</th>
+    <th>Update</th>
+    <th>Delete</th>
+  </tr>
+  {% for slot in interviews %}
+  <tr>
+    <td>{{slot.cand_email}}</td>
+    <td>{{slot.int_email}}</td>
+    <td>{{slot.start_time}}</td>
+    <td>{{slot.end_time}}</td>
+    <td>
+      
+      <form
+        method="post"
+        action='{% url "update_request" slot.pk%}'
+        style="background-color: inherit"
+      >
+        {% csrf_token %}
+        <button type="submit" class="btn btn-block" name="update" value="{{slot.pk}}">Update</button>
+      </form>
+    </td>
+    <td>
+      <form
+        method="post"
+        action='{% url "delete" %}'
+        style="background-color: inherit"
+      >
+        {% csrf_token %}
+        <input type="hidden" id="del" name="del" value="{{slot.pk}}" />
+        <input type="submit" value="Delete item" class="btn btn-danger" />
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+</div>
+{% endblock content %}
